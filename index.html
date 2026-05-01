@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ScamDect</title>
     
-    <!-- Liên kết PWA -->
+    <!-- Liên kết khai báo PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#171410">
-    <!-- Icon cho iOS -->
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <!-- FontAwesome -->
+    <!-- FontAwesome cho icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -27,17 +26,15 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; justify-content: center; overflow-x: hidden; }
+        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; justify-content: center; }
 
+        /* Giao diện chính làm nền */
         .app-container { width: 100%; max-width: 420px; min-height: 100vh; padding: 24px 20px; position: relative; }
-
-        /* UI ScamDect */
         .header { margin-top: 20px; margin-bottom: 40px; }
         .logo-title { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .logo-title i { font-size: 28px; color: var(--primary-orange); }
         .logo-title h1 { font-size: 28px; font-weight: 700; }
         .header p { color: var(--text-secondary); font-size: 15px; line-height: 1.4; }
-
         .section-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
         .status-section { margin-bottom: 30px; }
         .status-card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 20px; display: flex; align-items: center; gap: 16px; }
@@ -45,95 +42,59 @@
         .status-content { flex: 1; }
         .status-content h3 { font-size: 16px; margin-bottom: 4px; }
         .status-content p { color: var(--text-secondary); font-size: 13px; }
-        .status-arrow i { color: var(--text-secondary); font-size: 14px; }
-
         .manual-section { margin-bottom: 30px; }
         .input-card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 20px; margin-bottom: 16px; }
         .input-card label { display: block; color: var(--primary-orange); font-size: 14px; font-weight: 600; margin-bottom: 16px; }
         .input-card textarea { width: 100%; background: transparent; border: none; color: var(--text-primary); font-size: 15px; resize: none; height: 60px; outline: none; }
-        
         .action-row { display: flex; gap: 16px; margin-bottom: 16px; }
         .action-btn { flex: 1; background-color: var(--card-bg); border: none; border-radius: var(--border-radius); padding: 24px 10px; display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-secondary); }
         .action-btn i { font-size: 24px; color: var(--primary-orange); }
         .submit-btn { width: 100%; background-color: #241c18; border: none; border-radius: var(--border-radius); padding: 18px; color: var(--text-secondary); font-size: 16px; font-weight: 600; }
-        .footer { text-align: center; margin-top: 60px; color: #635e58; font-size: 13px; line-height: 1.6; }
 
-        /* --- POPUP ÉP CÀI ĐẶT WEB APP --- */
+        /* Màn hình khóa ép cài đặt */
         .install-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(23, 20, 16, 0.95); /* Màu nền che kín toàn bộ */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            backdrop-filter: blur(10px);
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(23, 20, 16, 0.98);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; backdrop-filter: blur(8px);
         }
         .install-modal {
-            background-color: var(--card-bg);
-            padding: 40px 24px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            width: 90%;
-            max-width: 340px;
-            border: 1px solid var(--primary-orange);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            background-color: var(--card-bg); padding: 40px 24px;
+            border-radius: var(--border-radius); text-align: center;
+            width: 90%; max-width: 340px; border: 1px solid var(--primary-orange);
         }
-        .install-modal i.fa-mobile-screen { font-size: 48px; color: var(--primary-orange); margin-bottom: 20px; }
-        .install-modal h2 { font-size: 20px; margin-bottom: 12px; color: #fff; }
+        .install-modal i.fa-download { font-size: 48px; color: var(--primary-orange); margin-bottom: 20px; }
+        .install-modal h2 { font-size: 22px; margin-bottom: 12px; color: #fff; }
         .install-modal p { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
-        
         .install-btn {
-            background-color: var(--primary-orange);
-            color: #fff;
-            border: none;
-            padding: 16px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            text-transform: uppercase;
+            background-color: var(--primary-orange); color: #fff; border: none;
+            padding: 16px 24px; border-radius: 12px; font-size: 16px;
+            font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase;
         }
         .ios-instruction {
-            display: none;
-            font-size: 13px;
-            color: var(--primary-orange);
-            margin-top: 16px;
-            background: rgba(240, 138, 52, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: left;
+            display: none; font-size: 13px; color: var(--primary-orange);
+            margin-top: 16px; background: rgba(240, 138, 52, 0.1);
+            padding: 12px; border-radius: 8px; text-align: left;
         }
     </style>
 </head>
 <body>
 
-    <!-- Giao diện chính của App -->
     <div class="app-container">
         <header class="header">
             <div class="logo-title"><i class="fa-solid fa-shield-halved"></i><h1>ScamDect</h1></div>
             <p>Bảo vệ bạn khỏi các mối đe dọa trực<br>tuyến</p>
         </header>
-
         <section class="status-section">
             <h2 class="section-title">Trạng thái hệ thống</h2>
             <div class="status-card">
                 <div class="status-icon"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="status-content">
-                    <h3>Đang bảo vệ</h3>
-                    <p>Hệ thống đang chặn cuộc gọi rác và giám sát AI.</p>
-                </div>
-                <div class="status-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="status-content"><h3>Đang bảo vệ</h3><p>Hệ thống đang chặn cuộc gọi rác và giám sát AI.</p></div>
             </div>
         </section>
-
         <section class="manual-section">
             <h2 class="section-title">Phân tích thủ công</h2>
-            <div class="input-card">
-                <label>Nội dung cần kiểm tra</label>
-                <textarea placeholder="Dán tin nhắn, URL hoặc mô tả tình huống tại đây..."></textarea>
-            </div>
+            <div class="input-card"><label>Nội dung cần kiểm tra</label><textarea placeholder="Dán tin nhắn, URL hoặc mô tả tình huống tại đây..."></textarea></div>
             <div class="action-row">
                 <button class="action-btn"><i class="fa-solid fa-camera"></i><span>Chụp ảnh</span></button>
                 <button class="action-btn"><i class="fa-regular fa-image"></i><span>Tải ảnh lên</span></button>
@@ -142,40 +103,45 @@
         </section>
     </div>
 
-    <!-- Màn hình chặn yêu cầu cài đặt Web App -->
+    <!-- Lớp phủ bắt buộc cài đặt -->
     <div class="install-overlay" id="installOverlay">
         <div class="install-modal">
-            <i class="fa-solid fa-mobile-screen"></i>
-            <h2>Cài đặt Web App</h2>
-            <p>Để sử dụng ScamDect, bạn phải thêm ứng dụng này vào màn hình chính của điện thoại.</p>
-            
+            <i class="fa-solid fa-download"></i>
+            <h2>Cài đặt ScamDect</h2>
+            <p>Phiên bản web bị vô hiệu hóa. Bấm nút dưới đây để cài đặt ứng dụng vào điện thoại của bạn.</p>
             <button class="install-btn" id="installBtn">Cài đặt ngay</button>
-            
             <div class="ios-instruction" id="iosInstruction">
                 <b>Dành cho iPhone/iPad:</b><br>
-                1. Nhấn vào biểu tượng <b>Chia sẻ</b> (Share) ở dưới cùng trình duyệt Safari.<br>
-                2. Chọn <b>"Thêm vào MH chính"</b> (Add to Home Screen).
+                1. Nhấn vào biểu tượng <b>Chia sẻ</b> dưới cùng trình duyệt.<br>
+                2. Chọn <b>"Thêm vào MH chính"</b>.
             </div>
         </div>
     </div>
 
     <script>
+        // Đăng ký Service Worker (BẮT BUỘC ĐỂ HIỆN NÚT INSTALL)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(() => {
+                console.log('Service Worker Registered');
+            });
+        }
+
         const overlay = document.getElementById('installOverlay');
         const installBtn = document.getElementById('installBtn');
         const iosInstruction = document.getElementById('iosInstruction');
         let deferredPrompt;
 
-        // 1. Kiểm tra xem người dùng đã cài và đang mở từ màn hình chính chưa
+        // Kiểm tra xem đã mở dạng App từ màn hình chính chưa
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        
+
         if (isStandalone) {
-            // Đã cài đặt -> Ẩn màn hình chặn, cho phép dùng web
+            // Đã cài app -> Cho dùng thoải mái
             overlay.style.display = 'none';
         } else {
-            // Chưa cài đặt -> Khóa màn hình
-            document.body.style.overflow = 'hidden'; 
-            
-            // 2. Phát hiện iOS (vì iOS Safari không hỗ trợ nút Install tự động)
+            // Chưa cài app -> Khóa không cho cuộn web
+            document.body.style.overflow = 'hidden';
+
+            // Xử lý riêng cho iOS
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             if (isIOS) {
                 installBtn.style.display = 'none';
@@ -183,29 +149,34 @@
             }
         }
 
-        // 3. Xử lý nút Cài đặt cho Android (Chrome)
+        // BẮT SỰ KIỆN CỦA CHROME (Giữ bảng Install lại, đợi bấm nút mới bung ra)
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
+            deferredPrompt = e; // Lưu lại event
         });
 
+        // Khi người dùng bấm nút "Cài đặt ngay"
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
-                deferredPrompt.prompt();
+                deferredPrompt.prompt(); // BẬT BẢNG INSTALL CỦA CHROME LÊN
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    console.log('Đã cài đặt!');
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
                 }
                 deferredPrompt = null;
             } else {
-                alert('Trình duyệt của bạn không hỗ trợ cài đặt tự động. Vui lòng vào Menu (3 chấm) chọn "Thêm vào màn hình chính".');
+                // Nếu trình duyệt chưa load kịp hoặc không hỗ trợ, nhắc nhở thủ công
+                alert('Vui lòng đợi 1 giây hoặc sử dụng trình duyệt Google Chrome để cài đặt tự động.');
             }
         });
 
-        // 4. Đăng ký Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+        // Tự động tắt màn hình khóa nếu Chrome báo cài đặt thành công
+        window.addEventListener('appinstalled', () => {
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
     </script>
 </body>
 </html>
